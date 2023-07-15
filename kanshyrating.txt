@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Rating Form</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+        }
+
+        #ratingFormContainer {
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border: 5px solid #ccc;
+            border-radius: 10px;
+        }
+
+        #ratingForm {
+            /* Add any additional styling for the form here */
+        }
+    </style>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="ratingFormContainer">
+        <div id="ratingForm">
+            <h1>Staff Rating Form</h1>
+            <!-- Add the image below the h1 element -->
+            <img src="channels4_profile_1.jpg" alt="Staff Image" width="200" height="200">
+            <form id="ratingForm">
+                <!-- Dropdown list to select staff -->
+                <label for="staff">Select Staff:</label>
+                <select id="staff" name="staff">
+                    <option value="staff1">Staff 1</option>
+                    <option value="staff2">Staff 2</option>
+                    <option value="staff3">Staff 3</option>
+                    <!-- You can add more staff options as needed -->
+                </select>
+                <br>
+                <!-- Dropdown list to select rating -->
+                <label for="rating">Select Rating:</label>
+                <select id="rating" name="rating">
+                    <option value="1">1 - Poor</option>
+                    <option value="2">2 - Below Average</option>
+                    <option value="3">3 - Average</option>
+                    <option value="4">4 - Good</option>
+                    <option value="5">5 - Excellent</option>
+                </select>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the ratings object to store cumulative ratings for each staff member
+        var ratings = {};
+
+        $(document).ready(function() {
+            // Your JavaScript code goes here
+        });
+    </script>
+</body>
+</html>
