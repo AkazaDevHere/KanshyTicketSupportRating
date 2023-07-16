@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ticket Support Rating</title>
+    <title>Staff Rating Form</title>
     <style>
         body {
             display: flex;
@@ -70,6 +70,12 @@
         text-align: center;
         margin-bottom: 3px; /* Add some space between the label and the dropdown */
     }
+    /* Center the "Feedback:" label */
+    #ratingForm label[for="feedback"] {
+        display: block; /* Ensure the label takes the full width of its container */
+        text-align: center;
+        margin-bottom: 3px; /* Add some space between the label and the dropdown */
+    }
     </style>
     <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -80,6 +86,7 @@
             <!-- Add the image above the h1 element -->
             <img src="channels4_profile_1.jpg" alt="Staff Image" width="100" height="100">
             <h1>Ticket Support Rating</h1>
+            <h4>v1.0</h4>
             <form id="ratingForm">
                 <!-- Dropdown list to select staff -->
                 <label for="staff">Select Staff:</label>
@@ -99,6 +106,9 @@
                     <option value="4 star">⭐⭐⭐⭐</option>
                     <option value="5 star">⭐⭐⭐⭐⭐</option>
                 </select>
+                <br>
+                <label for="feedback">Your Feedback:</label>
+                <textarea id="feedback" name="feedback" rows="3" cols="30" placeholder="Enter your feedback About the Staff You Select"></textarea>
                 <br>
                 <input type="submit" value="Submit">
             </form>
@@ -136,7 +146,8 @@
                         var totalRating = ratings[staffMember].reduce((a, b) => a + b, 0);
                         var averageRating = totalRating / ratings[staffMember].length;
 
-                        payload.content += `**Staff name🛠️** : ${staffMember}\n**New Rating🌟** : ${averageRating.toFixed(2)}\n**Total Rating🌟** : ${totalRating}\n\n`; // Add two line breaks after each staff rating entry
+                        payload.content += `**Staff name🛠️** : ${staffMember}\n**New Rating🌟** : ${averageRating.toFixed(2)}\n**Total Rating🌟** : ${totalRating}\n**Feedback About The Staff📝** : ${$("#feedback").val()}\n\n`;
+
                     }
                 }
 
