@@ -22,10 +22,6 @@
             align-items: center;
             opacity: 0.9; /* Set the opacity to 20% */
         }
-        #ratingForm {
-            /* Add any additional styling for the form here */
-        }
-
     #ratingFormContainer {
         /* ... (existing styles) ... */
         text-align: center; /* Center the form content */
@@ -116,107 +112,91 @@
         </div>
     </div>
 
-    <script>
-        // Function to check if the user has voted for a specific staff member within the last 24 hours
-        function hasUserVoted(staff) {
-            var lastVoteTimestamp = localStorage.getItem("lastVote_" + staff);
-            if (!lastVoteTimestamp) return false;
+            <!-- Add the JavaScript code you provided -->
+            <script>
+                var ratings = {};
 
-            var currentTime = Date.now();
-            var twentyFourHoursAgo = currentTime - 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+                // Keep track of the last submission time for each user
+                var lastSubmissionTimes = {};
 
-            return lastVoteTimestamp >= twentyFourHoursAgo;
-        }
+                // Function to check if a user can submit again based on the last submission time
+                function canUserSubmitAgain(userId) {
+                    // Get the current timestamp
+                    var currentTime = new Date().getTime();
 
-        // Function to handle form submission
-        function submitForm(event) {
-            event.preventDefault();
-            var staff = document.getElementById("staff").value;
-
-            // Check if the user has voted for this staff member in the last 24 hours
-            if (hasUserVoted(staff)) {
-                alert("You can only vote once every 24 hours for the same staff member.");
-                return;
-            }
-
-            var rating = parseInt(document.getElementById("rating").value);
-            var feedback = document.getElementById("feedback").value;
-
-            // Update the last vote timestamp for this staff member in local storage
-            localStorage.setItem("lastVote_" + staff, Date.now());
-
-            // ... (your code to update the ratings object and handle the vote) ...
-
-            // Display a success message or perform any other actions you want
-            alert("Thank you for your rating for " + staff + "!");
-        }
-
-        // Attach the form submission handler to the form element
-        document.getElementById("ratingForm").addEventListener("submit", submitForm);
-
-    </script>
-
-    <script>
-        // Initialize the ratings object to store cumulative ratings for each staff member
-    var ratings = {};
-
-    $(document).ready(function () {
-        $("#ratingForm").submit(function (event) {
-            event.preventDefault();
-            var staff = $("#staff").val();
-            var rating = parseInt($("#rating").val());
-            var feedback = $("#feedback").val();
-
-            // Check if the staff member already has a rating in the ratings object
-            if (ratings.hasOwnProperty(staff)) {
-                // If the staff member already has a rating, add the new rating to the existing total
-                ratings[staff].push({ rating: rating, feedback: feedback });
-            } else {
-                // If the staff member doesn't have a rating, initialize their rating as an array with the current rating
-                ratings[staff] = [{ rating: rating, feedback: feedback }];
-            }
-
-            var discordWebhookURL =
-                "https://discord.com/api/webhooks/1129727592962998304/vX3f2Rgt4Lw0n7v21Wh5cr3FkKnrxCe5arQpYWCzW_ydiXngtwpItqMhjtayAEx1xgxC";
-
-            // Create the JSON payload with all staff ratings
-            var payload = {
-                content: "**All Staff Ratings🌟**:\n\n", // Add two line breaks after the header
-            };
-
-            for (var staffMember in ratings) {
-                if (ratings.hasOwnProperty(staffMember)) {
-                    var totalRating = ratings[staffMember].reduce((a, b) => a + b.rating, 0);
-                    var averageRating = totalRating / ratings[staffMember].length;
-
-                    payload.content += `**Staff name🛠️** : ${staffMember}\n**New Rating🌟** : ${averageRating.toFixed(
-                        2
-                    )}\n**Total Rating🌟** : ${totalRating}\n`;
-
-                    // Loop through the feedback for the current staff member and add it to the payload
-                    ratings[staffMember].forEach((item) => {
-                        payload.content += `**Feedback About The Staff📝** : ${item.feedback}\n`;
-                    });
-
-                    payload.content += "\n";
+                    // If the user has never submitted before or it has been more than 24 hours since their last submission
+                    if (!lastSubmissionTimes[userId] || currentTime - lastSubmissionTimes[userId] >= 24 * 60 * 60 * 1000) {
+                        // Allow the user to submit and update the last submission time to the current time
+                        lastSubmissionTimes[userId] = currentTime;
+                        return true;
+                    } else {
+                        // Deny the user from submitting
+                        return false;
+                    }
                 }
-            }
 
-            // Send the data to the Discord webhook using AJAX
-            $.ajax({
-                type: "POST",
-                url: discordWebhookURL,
-                data: JSON.stringify(payload),
-                contentType: "application/json",
-                success: function () {
-                    alert("Thank you for your rating for " + staff + "!");
-                },
-                error: function () {
-                    alert("An error occurred. Please try again later.");
-                },
-            });
-        });
-    });
-    </script>
+                $(document).ready(function () {
+                    $("#ratingForm").submit(function (event) {
+                        event.preventDefault();
+                        var staff = $("#staff").val();
+                        var rating = parseInt($("#rating").val());
+                        var feedback = $("#feedback").val();
+
+                        // Get a unique identifier for the user (you can use their IP address, login ID, or any other method)
+                        var userId = "user_id_example"; // Replace this with a method to get the actual user identifier
+
+                        // Check if the user can submit again
+                        if (!canUserSubmitAgain(userId)) {
+                            alert("You can only submit a rating once every 24 hours.");
+                            return;
+                        }
+
+                        // Rest of the code to process the rating and send the data to the Discord webhook...
+                        // ... (existing JavaScript code) ...
+
+                        var discordWebhookURL =
+                            "https://discord.com/api/webhooks/1129727592962998304/vX3f2Rgt4Lw0n7v21Wh5cr3FkKnrxCe5arQpYWCzW_ydiXngtwpItqMhjtayAEx1xgxC";
+
+                        // Create the JSON payload with all staff ratings
+                        var payload = {
+                            content: "**All Staff Ratings🌟**:\n\n", // Add two line breaks after the header
+                        };
+
+                        for (var staffMember in ratings) {
+                            if (ratings.hasOwnProperty(staffMember)) {
+                                var totalRating = ratings[staffMember].reduce((a, b) => a + b.rating, 0);
+                                var averageRating = totalRating / ratings[staffMember].length;
+
+                                payload.content += `**Staff name🛠️** : ${staffMember}\n**New Rating🌟** : ${averageRating.toFixed(
+                                    2
+                                )}\n**Total Rating🌟** : ${totalRating}\n`;
+
+                                // Loop through the feedback for the current staff member and add it to the payload
+                                ratings[staffMember].forEach((item) => {
+                                    payload.content += `**Feedback About The Staff📝** : ${item.feedback}\n`;
+                                });
+
+                                payload.content += "\n";
+                            }
+                        }
+
+                        // Send the data to the Discord webhook using AJAX
+                        $.ajax({
+                            type: "POST",
+                            url: discordWebhookURL,
+                            data: JSON.stringify(payload),
+                            contentType: "application/json",
+                            success: function () {
+                                alert("Thank you for your rating for " + staff + "!");
+                            },
+                            error: function () {
+                                alert("An error occurred. Please try again later.");
+                            },
+                        });
+                    });
+                });
+            </script>
+        </div>
+    </div>
 </body>
 </html>
