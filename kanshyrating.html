@@ -3,14 +3,16 @@
 <head>
     <title>Staff Rating Form</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #00a2ff;
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        background-image: url('channels4_profile_2.jpg'); /* Replace 'path/to/your/background-image.jpg' with the actual URL or file path of your background image */
+        background-size: 40px 40px;
+        background-color: #00a2ff;
+        background-size: cover; /* Set the background image to cover the entire viewport */
         }
-
         #ratingFormContainer {
             max-width: 600px;
             padding: 20px;
@@ -21,9 +23,6 @@
             flex-direction: column;
             align-items: center;
             opacity: 0.9; /* Set the opacity to 20% */
-        }
-        #ratingForm {
-            /* Add any additional styling for the form here */
         }
 
     #ratingFormContainer {
@@ -105,11 +104,7 @@
                     <option value="3 star">⭐⭐⭐</option>
                     <option value="4 star">⭐⭐⭐⭐</option>
                     <option value="5 star">⭐⭐⭐⭐⭐</option>
-                    <option value="-1 star">-1⭐</option>
-                    <option value="-2 star">-2⭐⭐</option>
-                    <option value="-2 star">-3⭐⭐⭐</option>
-                    <option value="-2 star">-4⭐⭐⭐⭐</option>
-                    <option value="-2 star">-5⭐⭐⭐⭐⭐</option>
+                   <option value="-1000">-1000 ⭐</option>
                 </select>
                 <br>
                 <label for="feedback">Your Feedback:</label>
@@ -125,7 +120,7 @@
         var ratings = {};
 
         $(document).ready(function () {
-            var submitTimeKey = "lastSubmitTime";
+            var submitTimeKey = "lastSubmitTime002";
             var submitInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
             // Function to check if the user is allowed to submit
