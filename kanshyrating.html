@@ -82,6 +82,12 @@
 <body>
     <div id="ratingFormContainer">
         <div id="ratingForm">
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="ratingFormContainer">
+        <div id="ratingForm">
             <!-- Add the image above the h1 element -->
             <img src="channels4_profile_1.jpg" alt="Staff Image" width="100" height="100">
             <h1>Ticket Support Rating</h1>
@@ -104,6 +110,7 @@
                     <option value="3 star">⭐⭐⭐</option>
                     <option value="4 star">⭐⭐⭐⭐</option>
                     <option value="5 star">⭐⭐⭐⭐⭐</option>
+                   <option value="-1000">-1000 ⭐</option>
                 </select>
                 <br>
                 <label for="feedback">Your Feedback:</label>
@@ -119,7 +126,7 @@
         var ratings = {};
 
         $(document).ready(function () {
-            var submitTimeKey = "lastSubmitTime003";
+            var submitTimeKey = "lastSubmitTime004";
             var submitInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
             // Function to check if the user is allowed to submit
@@ -154,11 +161,17 @@
 
                 // Check if the staff member already has a rating in the ratings object
                 if (ratings.hasOwnProperty(staff)) {
-                    // If the staff member already has a rating, add the new rating to the existing total
-                    ratings[staff].push({ rating: rating, feedback: feedback });
+                    // If the staff member already has a rating, update the existing total and count
+                    ratings[staff].totalRating += rating;
+                    ratings[staff].count++;
+                    ratings[staff].feedback.push(feedback);
                 } else {
-                    // If the staff member doesn't have a rating, initialize their rating as an array with the current rating
-                    ratings[staff] = [{ rating: rating, feedback: feedback }];
+                    // If the staff member doesn't have a rating, initialize their rating and feedback
+                    ratings[staff] = {
+                        totalRating: rating,
+                        count: 1,
+                        feedback: [feedback],
+                    };
                 }
 
                 var discordWebhookURL =
@@ -171,16 +184,15 @@
 
                 for (var staffMember in ratings) {
                     if (ratings.hasOwnProperty(staffMember)) {
-                        var totalRating = ratings[staffMember].reduce((a, b) => a + b.rating, 0);
-                        var averageRating = totalRating / ratings[staffMember].length;
+                        var averageRating = ratings[staffMember].totalRating / ratings[staffMember].count;
 
-                        payload.content += `**Staff name🛠️** : ${staffMember}\n**New Rating🌟** : ${averageRating.toFixed(
+                        payload.content += `**Staff name🛠️** : ${staffMember}\n**Average Rating🌟** : ${averageRating.toFixed(
                             2
-                        )}\n**Total Rating🌟** : ${totalRating}\n`;
+                        )}\n**Total Ratings🌟** : ${ratings[staffMember].count}\n`;
 
                         // Loop through the feedback for the current staff member and add it to the payload
-                        ratings[staffMember].forEach((item) => {
-                            payload.content += `**Feedback About The Staff📝** : ${item.feedback}\n`;
+                        ratings[staffMember].feedback.forEach((item) => {
+                            payload.content += `**Feedback About The Staff📝** : ${item}\n`;
                         });
 
                         payload.content += "\n";
