@@ -82,12 +82,6 @@
 <body>
     <div id="ratingFormContainer">
         <div id="ratingForm">
-    <!-- Include jQuery library -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-    <div id="ratingFormContainer">
-        <div id="ratingForm">
             <!-- Add the image above the h1 element -->
             <img src="channels4_profile_1.jpg" alt="Staff Image" width="100" height="100">
             <h1>Ticket Support Rating</h1>
@@ -110,7 +104,6 @@
                     <option value="3 star">⭐⭐⭐</option>
                     <option value="4 star">⭐⭐⭐⭐</option>
                     <option value="5 star">⭐⭐⭐⭐⭐</option>
-                   <option value="-1000">-1000 ⭐</option>
                 </select>
                 <br>
                 <label for="feedback">Your Feedback:</label>
@@ -126,7 +119,7 @@
         var ratings = {};
 
         $(document).ready(function () {
-            var submitTimeKey = "lastSubmitTime004";
+            var submitTimeKey = "lastSubmitTime005";
             var submitInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
             // Function to check if the user is allowed to submit
@@ -184,11 +177,13 @@
 
                 for (var staffMember in ratings) {
                     if (ratings.hasOwnProperty(staffMember)) {
-                        var averageRating = ratings[staffMember].totalRating / ratings[staffMember].count;
+                        var totalRating = ratings[staffMember].totalRating;
+                        var count = ratings[staffMember].count;
+                        var averageRating = totalRating / count;
 
                         payload.content += `**Staff name🛠️** : ${staffMember}\n**Average Rating🌟** : ${averageRating.toFixed(
                             2
-                        )}\n**Total Ratings🌟** : ${ratings[staffMember].count}\n`;
+                        )}\n**Total Ratings🌟** : ${count}\n`;
 
                         // Loop through the feedback for the current staff member and add it to the payload
                         ratings[staffMember].feedback.forEach((item) => {
