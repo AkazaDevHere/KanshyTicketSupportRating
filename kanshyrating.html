@@ -12,18 +12,18 @@
         background-size: 40px 40px;
         background-color: #00a2ff;
         background-size: cover; /* Set the background image to cover the entire viewport */
-        }
-        #ratingFormContainer {
-            max-width: 600px;
-            padding: 20px;
-            background-color: #00d2ff;
-            border: 5px solid #000000;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            opacity: 0.9; /* Set the opacity to 20% */
-        }
+    }
+    #ratingFormContainer {
+        max-width: 600px;
+        padding: 20px;
+        background-color: #00d2ff;
+        border: 5px solid #000000;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        opacity: 0.9; /* Set the opacity to 20% */
+    }
 
     #ratingFormContainer {
         /* ... (existing styles) ... */
@@ -49,14 +49,14 @@
         background-color: #45a049; /* Darker green on hover */
     }
 
-        /* Style the image to center it within the container */
-        #ratingForm img {
+    /* Style the image to center it within the container */
+    #ratingForm img {
         margin: 0 auto; /* Center the image horizontally */
         display: block; /* Remove any default spacing that may affect centering */
         border: 5px solid #000000; /* Add a border to the image */
         border-radius: 50%; /* Make the image circular by setting border-radius to 50% */
         margin-bottom: 20px; /* Add some space between the image and the form */
-        }
+    }
     /* Center the "Select Staff:" label */
     #ratingForm label[for="staff"] {
         display: block; /* Ensure the label takes the full width of its container */
@@ -112,6 +112,8 @@
                 <br>
                 <input type="submit" value="Vote">
             </form>
+            <!-- Display the Total Rating for the selected staff -->
+            <div id="totalRatingDisplay">Total Rating: 0</div>
         </div>
     </div>
 
@@ -120,8 +122,8 @@
         var ratings = {};
 
         $(document).ready(function () {
-            var submitTimeKey = "lastSubmitTime006";
-            var submitInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            var submitTimeKey = "lastSubmitTime007";
+            var submitInterval = 0 * 60 * 60 * 1000; // 24 hours in milliseconds
 
             // Function to check if the user is allowed to submit
             function canSubmit() {
@@ -180,11 +182,8 @@
                     if (ratings.hasOwnProperty(staffMember)) {
                         var totalRating = ratings[staffMember].totalRating;
                         var count = ratings[staffMember].count;
-                        var averageRating = totalRating / count;
 
-                        payload.content += `**Staff name🛠️** : ${staffMember}\n**Average Rating🌟** : ${averageRating.toFixed(
-                            2
-                        )}\n**Total Ratings🌟** : ${count}\n`;
+                        payload.content += `**Staff name🛠️** : ${staffMember}\n**Total Rating🌟** : ${totalRating}\n`;
 
                         // Loop through the feedback for the current staff member and add it to the payload
                         ratings[staffMember].feedback.forEach((item) => {
@@ -209,8 +208,26 @@
                     },
                 });
 
+                // Update the Total Rating display for the selected staff
+                $("#totalRatingDisplay").text("Total Rating: " + ratings[staff].totalRating);
+
                 // Save the submission time
                 saveSubmitTime();
+            });
+
+            // Function to update the Total Rating display for the selected staff
+            function updateTotalRatingDisplay(staff) {
+                if (ratings.hasOwnProperty(staff)) {
+                    $("#totalRatingDisplay").text("Total Rating: " + ratings[staff].totalRating);
+                } else {
+                    $("#totalRatingDisplay").text("Total Rating: 0");
+                }
+            }
+
+            // Event listener for staff dropdown change
+            $("#staff").change(function () {
+                var selectedStaff = $(this).val();
+                updateTotalRatingDisplay(selectedStaff);
             });
         });
     </script>
